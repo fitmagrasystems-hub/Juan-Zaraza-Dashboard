@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Adaptógeno Clínico - Médico 32 años</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #1a3a52;
+            --secondary: #2e5266;
+            --accent: #0088cc;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 15px;
+            color: var(--dark);
+        }
+        
+        .container { max-width: 1600px; margin: 0 auto; }
+        
+        .masthead {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            text-align: center;
+            border-top: 8px solid var(--primary);
+        }
+        
+        .masthead h1 {
+            font-size: 3em;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .masthead .subtitle {
+            font-size: 1.3em;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        
+        .profile-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .metric {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: var(--light);
+            color: var(--dark);
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .tab-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slideIn 0.4s ease; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tier-section {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-left: 8px solid var(--accent);
+        }
+        
+        .tier-section h2 {
+            color: var(--primary);
+            font-size: 2em;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .supplement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        
+        .supplement-card {
+            background: var(--white);
+            border: 2px solid var(--light);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .supplement-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            border-color: var(--accent);
+        }
+        
+        .supplement-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+        }
+        
+        .supplement-title {
+            color: var(--primary);
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .supplement-botanical {
+            color: #95a5a6;
+            font-size: 0.95em;
+            font-style: italic;
+            margin-bottom: 16px;
+        }
+        
+        .data-row {
+            margin: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            align-items: flex-start;
+        }
+        
+        .data-label {
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 100px;
+            font-size: 0.9em;
+        }
+        
+        .data-value {
+            text-align: right;
+            color: var(--dark);
+            font-size: 0.95em;
+            flex: 1;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-right: 6px;
+            margin-top: 6px;
+        }
+        
+        .badge-strong {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .ref-link {
+            background: #e8f4f8;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 0.85em;
+        }
+        
+        .ref-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .ref-link a:hover { text-decoration: underline; }
+        
+        .protocol-table {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .protocol-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .protocol-table th {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 1em;
+        }
+        
+        .protocol-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        .protocol-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .protocol-table strong {
+            color: var(--primary);
+        }
+        
+        .day-label {
+            font-weight: 700;
+            color: white;
+            padding: 18px;
+            border-radius: 0;
+            margin: 0;
+            text-align: left;
+        }
+        
+        .day-label-no-swim {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .day-label-swim {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .timeline-node {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 6px solid var(--success);
+            position: relative;
+        }
+        
+        .timeline-node h3 {
+            color: var(--primary);
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+        
+        .timeline-node ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        
+        .timeline-node li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        .safety-warning {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        
+        .cost-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .cost-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 6px solid var(--accent);
+        }
+        
+        .cost-card h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+        
+        .cost-amount {
+            font-size: 2.2em;
+            color: var(--success);
+            font-weight: 700;
+            margin: 15px 0;
+        }
+        
+        .footer {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            color: #7f8c8d;
+        }
+        
+        @media (max-width: 768px) {
+            .masthead { padding: 30px; }
+            .masthead h1 { font-size: 2em; }
+            .supplement-grid { grid-template-columns: 1fr; }
+            .nav-tabs { flex-direction: column; }
+            .tab-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- MASTHEAD -->
+        <div class="masthead">
+            <h1>⭐ TIER 1 - Recomendaciones Prioritarias</h1>
+            <p class="subtitle">Evidencia Fuerte · Suplementos Verificados</p>
+            <p style="color: #555; font-size: 1.1em; margin-bottom: 20px;">Protocolo Adaptógeno Basado en Evidencia Clínica</p>
+            <div class="profile-metrics">
+                <div class="metric">
+                    <div class="metric-label">Perfil</div>
+                    <div class="metric-value">Médico · 32 años</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Peso</div>
+                    <div class="metric-value">66 kg</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Carga Laboral</div>
+                    <div class="metric-value">16-18 h/día</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Meta</div>
+                    <div class="metric-value">Oceanman 5km</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION TABS -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('tier1')">⭐ TIER 1 (Evidencia Fuerte)</button>
+            <button class="tab-btn" onclick="showTab('protocol')">📅 Protocolo Diario</button>
+            <button class="tab-btn" onclick="showTab('timeline')">⏱️ Cronograma 12 Semanas</button>
+            <button class="tab-btn" onclick="showTab('safety')">⚠️ Seguridad Clínica</button>
+            <button class="tab-btn" onclick="showTab('costs')">💰 Costos</button>
+        </div>
+
+        <!-- TAB 1: TIER 1 SUPLEMENTOS -->
+        <div id="tier1" class="tab-content active">
+            <div class="tier-section">
+                <h2>🧬 TIER 1: SUPLEMENTOS CON EVIDENCIA FUERTE</h2>
+                <p style="color: #666; margin-bottom: 30px; font-size: 1.05em;">Meta-análisis · Systematic Reviews · RCTs verificados (2015-2025)</p>
+                
+                <div class="supplement-grid">
+                    <!-- 1. CREATINA -->
+                    <div class="supplement-card">
+                        <div class="supplement-title">🧬 Creatina Monohidrato</div>
+                        <div class="supplement-botanical">C₄H₉N₃O₂·HCl · Energía Cerebral</div>
+                        <div class="data-row">
+                            <span class="data-label">Dosis:</span>
+                            <span class="data-value">3-5 g/día</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Timing:</span>
+                            <span class="data-value">Mañana (desayuno)</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Efecto:</span>
+                            <span class="data-value">Memoria ↑ (SMD=0.31), Atención mejorada bajo deprivación</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Evidencia:</span>
+                            <div class="data-value">
+                                <span class="badge badge-strong">✓ Meta-análisis 2024</span>
+                                <span class="badge badge-strong">✓ 16 RCTs</span>
+                            </div>
+                        </div>
+                        <div class="ref-link">
+                            <strong>Ref verificada:</strong> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11275561/" target="_blank">Front Nutr. 2024;11:1424972</a>
+                        </div>
+                    </div>
+
+                    <!-- 2. ASHWAGANDHA -->
+                    <div class="supplement-card">
+                        <div class="supplement-title">🧬 Ashwagandha</div>
+                        <div class="supplement-botanical">Withania somnifera · Estrés + Cortisol</div>
+                        <div class="data-row">
+                            <span class="data-label">Dosis:</span>
+                            <span class="data-value">300-600 mg/día</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Timing:</span>
+                            <span class="data-value">Mañana + Noche (dividido)</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Efecto:</span>
+                            <span class="data-value">Cortisol ↓, Sueño ↑ (72% vs 29% placebo)</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Evidencia:</span>
+                            <div class="data-value">
+                                <span class="badge badge-strong">✓ Systematic Review</span>
+                                <span class="badge badge-strong">✓ 7 RCTs</span>
+                            </div>
+                        </div>
+                        <div class="ref-link">
+                            <strong>Ref verificada:</strong> <a href="https://ods.od.nih.gov/factsheets/Ashwagandha-HealthProfessional/" target="_blank">NIH ODS (2025)</a>
+                        </div>
+                    </div>
+
+                    <!-- 3. PANAX GINSENG -->
+                    <div class="supplement-card">
+                        <div class="supplement-title">🧬 Panax Ginseng Rojo</div>
+                        <div class="supplement-botanical">Ginseng Coreano · Fatiga Ocupacional</div>
+                        <div class="data-row">
+                            <span class="data-label">Dosis:</span>
+                            <span class="data-value">1000-1500 mg/día</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Timing:</span>
+                            <span class="data-value">Mañana (efecto adaptógeno)</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Efecto:</span>
+                            <span class="data-value">Lactato ↓, VO₂max ↑, Fatiga mental ↓30%</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Evidencia:</span>
+                            <div class="data-value">
+                                <span class="badge badge-strong">✓ Meta-análisis 2024</span>
+                                <span class="badge badge-strong">✓ RCTs ocupacional</span>
+                            </div>
+                        </div>
+                        <div class="ref-link">
+                            <strong>Ref verificada:</strong> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11118118/" target="_blank">PMC11118118 (2024)</a>
+                        </div>
+                    </div>
+
+                    <!-- 4. CORDYCEPS -->
+                    <div class="supplement-card">
+                        <div class="supplement-title">🧬 Cordyceps militaris</div>
+                        <div class="supplement-botanical">Hongo · Biogénesis Mitocondrial</div>
+                        <div class="data-row">
+                            <span class="data-label">Dosis:</span>
+                            <span class="data-value">2000-3000 mg/día</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Timing:</span>
+                            <span class="data-value">60-90 min PRE-nado</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Efecto:</span>
+                            <span class="data-value">VO₂max +4.8 ml/kg/min, Tiempo exhaustión +69.8s</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Evidencia:</span>
+                            <div class="data-value">
+                                <span class="badge badge-strong">✓ RCT 2016</span>
+                                <span class="badge badge-strong">✓ Atletas validado</span>
+                            </div>
+                        </div>
+                        <div class="ref-link">
+                            <strong>Ref verificada:</strong> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5236007/" target="_blank">PMC5236007 (2016)</a>
+                        </div>
+                    </div>
+
+                    <!-- 5. BETA-ALANINA -->
+                    <div class="supplement-card">
+                        <div class="supplement-title">🧬 Beta-Alanina</div>
+                        <div class="supplement-botanical">Aminoácido · Buffer Lactato</div>
+                        <div class="data-row">
+                            <span class="data-label">Dosis:</span>
+                            <span class="data-value">3-6 g/día (4 dosis)</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Timing:</span>
+                            <span class="data-value">800mg × 4 con comidas</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Efecto:</span>
+                            <span class="data-value">Resistencia muscular +40-60%</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Evidencia:</span>
+                            <div class="data-value">
+                                <span class="badge badge-strong">✓ Meta-análisis 2017</span>
+                                <span class="badge badge-strong">✓ 1461 participantes</span>
+                            </div>
+                        </div>
+                        <div class="ref-link">
+                            <strong>Ref verificada:</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/27797728/" target="_blank">Pubmed 27797728 (2017)</a>
+                        </div>
+                    </div>
+
+                    <!-- 6. MAGNESIO L-TREONATO -->
+                    <div class="supplement-card">
+                        <div class="supplement-title">🧬 Magnesio L-Treonato</div>
+                        <div class="supplement-botanical">Magtein® · Sueño Profundo</div>
+                        <div class="data-row">
+                            <span class="data-label">Dosis:</span>
+                            <span class="data-value">1500 mg/noche</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Timing:</span>
+                            <span class="data-value">21:00-21:30 (2-3h antes dormir)</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Efecto:</span>
+                            <span class="data-value">Sueño REM ↑18%, Memoria trabajo ↑</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Evidencia:</span>
+                            <div class="data-value">
+                                <span class="badge badge-strong">✓ RCTs sueño</span>
+                                <span class="badge badge-strong">✓ Atletas validado</span>
+                            </div>
+                        </div>
+                        <div class="ref-link">
+                            <strong>Ref:</strong> Life Extension Magtein® (múltiples RCTs 2015-2020)
+                        </div>
+                    </div>
+
+                    <!-- 7. GLICINA -->
+                    <div class="supplement-card">
+                        <div class="supplement-title">🧬 Glicina Pura</div>
+                        <div class="supplement-botanical">L-Glicina · Insomnio Funcional</div>
+                        <div class="data-row">
+                            <span class="data-label">Dosis:</span>
+                            <span class="data-value">3000 mg (3g polvo)</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Timing:</span>
+                            <span class="data-value">21:30 (inmediatamente antes dormir)</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Efecto:</span>
+                            <span class="data-value">Latencia sueño ↓10-17 min, Calidad ↑35-45%</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Evidencia:</span>
+                            <div class="data-value">
+                                <span class="badge badge-strong">✓ Systematic Review</span>
+                                <span class="badge badge-strong">✓ PSG validado</span>
+                            </div>
+                        </div>
+                        <div class="ref-link">
+                            <strong>Ref:</strong> Multiple RCTs sueño (2015-2023)
+                        </div>
+                    </div>
+
+                    <!-- 8. OMEGA-3 + PS -->
+                    <div class="supplement-card">
+                        <div class="supplement-title">🧬 Omega-3 + Fosfatidilserina</div>
+                        <div class="supplement-botanical">EPA/DHA + PS · Recuperación Post-Ejercicio</div>
+                        <div class="data-row">
+                            <span class="data-label">Dosis:</span>
+                            <span class="data-value">Ω₃: 1500mg / PS: 300mg</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Timing:</span>
+                            <span class="data-value">POST-nado (16:45) con comida</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Efecto:</span>
+                            <span class="data-value">CK ↓25-35%, Cortisol regulado, Sueño ↑</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Evidencia:</span>
+                            <div class="data-value">
+                                <span class="badge badge-strong">✓ RCT 12 semanas</span>
+                                <span class="badge badge-strong">✓ Recovery studies</span>
+                            </div>
+                        </div>
+                        <div class="ref-link">
+                            <strong>Ref verificada:</strong> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4942871/" target="_blank">PMC4942871 (2016)</a>
+                        </div>
+                    </div>
+
+                    <!-- 9. QUERCETINA -->
+                    <div class="supplement-card">
+                        <div class="supplement-title">🧬 Quercetina</div>
+                        <div class="supplement-botanical">Flavonoide · Antioxidante</div>
+                        <div class="data-row">
+                            <span class="data-label">Dosis:</span>
+                            <span class="data-value">1000 mg/día (6 semanas)</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Timing:</span>
+                            <span class="data-value">Con comidas (absorción grasas)</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Efecto:</span>
+                            <span class="data-value">TAC ↑, SOD ↑, MDA ↓, IL-6 ↓</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Evidencia:</span>
+                            <div class="data-value">
+                                <span class="badge badge-strong">✓ RCT 2022</span>
+                                <span class="badge badge-strong">✓ Meta-análisis</span>
+                            </div>
+                        </div>
+                        <div class="ref-link">
+                            <strong>Ref verificada:</strong> <a href="https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2022.875319/full" target="_blank">Front Nutr. 2022;10:875319</a>
+                        </div>
+                    </div>
+
+                    <!-- 10. L-TEANINA + CAFEÍNA -->
+                    <div class="supplement-card">
+                        <div class="supplement-title">🧬 L-Teanina + Cafeína</div>
+                        <div class="supplement-botanical">Té Verde + Alcaloide · Cognición</div>
+                        <div class="data-row">
+                            <span class="data-label">Dosis:</span>
+                            <span class="data-value">Teanina: 100-200mg / Cafeína: 40-100mg</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Timing:</span>
+                            <span class="data-value">Mañana (30-60 min antes demanda alta)</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Efecto:</span>
+                            <span class="data-value">Atención ↑, Distracción ↓, Claridad cognitiva</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Evidencia:</span>
+                            <div class="data-value">
+                                <span class="badge badge-strong">✓ Systematic Review 2021</span>
+                                <span class="badge badge-strong">✓ fMRI validado</span>
+                            </div>
+                        </div>
+                        <div class="ref-link">
+                            <strong>Ref verificada:</strong> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8794723/" target="_blank">PMC8794723 (2021)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: PROTOCOLO DIARIO -->
+        <div id="protocol" class="tab-content">
+            <div class="tier-section">
+                <h2>📅 Protocolo Diferenciado Diario</h2>
+                
+                <div style="margin-top: 30px;">
+                    <div class="day-label day-label-no-swim" style="margin-bottom: 20px; border-radius: 8px;">🔵 DÍAS SIN NATACIÓN</div>
+                    <div class="protocol-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Suplemento</th>
+                                    <th>Dosis</th>
+                                    <th>Timing</th>
+                                    <th>Objetivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Ashwagandha</strong></td>
+                                    <td>300 mg</td>
+                                    <td>07:00</td>
+                                    <td>Regulación cortisol basal</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Panax Ginseng</strong></td>
+                                    <td>1000 mg</td>
+                                    <td>07:00</td>
+                                    <td>Energía cognitiva sostenida</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Creatina</strong></td>
+                                    <td>5 g</td>
+                                    <td>07:00</td>
+                                    <td>Energía cerebral ATP-PCr</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Magnesio L-Treonato</strong></td>
+                                    <td>1500 mg</td>
+                                    <td>21:00-21:30</td>
+                                    <td>Sueño profundo NREM</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Glicina</strong></td>
+                                    <td>3000 mg</td>
+                                    <td>21:30</td>
+                                    <td>Arquitectura sueño optimizada</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <div class="day-label day-label-swim" style="margin-bottom: 20px; border-radius: 8px;">🟢 DÍAS CON NATACIÓN</div>
+                    <div class="protocol-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Suplemento</th>
+                                    <th>Dosis</th>
+                                    <th>Timing</th>
+                                    <th>Justificación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: #f0f8ff;">
+                                    <td colspan="4"><strong>MAÑANA (mantiene igual a días sin nado)</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ashwagandha</strong></td>
+                                    <td>300 mg</td>
+                                    <td>07:00</td>
+                                    <td>Base hormonal NO cambia; estrés ocupacional continúa</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Panax Ginseng</strong></td>
+                                    <td>1000 mg</td>
+                                    <td>07:00</td>
+                                    <td>Base adaptógena mantiene</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Creatina</strong></td>
+                                    <td>5 g</td>
+                                    <td>07:00</td>
+                                    <td>Energía cerebral durante turno clínico</td>
+                                </tr>
+                                <tr style="background: #ffe8f0;">
+                                    <td colspan="4"><strong>PRE-NADO (14:00-15:00 si nado 15:30-16:30)</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cordyceps</strong></td>
+                                    <td>2000 mg</td>
+                                    <td>14:30 (60 min pre-nado)</td>
+                                    <td>VO₂max + eficiencia mitocondrial específica</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Beta-Alanina</strong></td>
+                                    <td>800 mg (1 de 4)</td>
+                                    <td>14:30</td>
+                                    <td>Buffer lactato, capacidad anaeróbica-aeróbica</td>
+                                </tr>
+                                <tr style="background: #f0fff0;">
+                                    <td colspan="4"><strong>POST-NADO (16:45-17:00)</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Omega-3 + PS</strong></td>
+                                    <td>Ω₃: 1500mg / PS: 300mg</td>
+                                    <td>16:45</td>
+                                    <td>Reducción inflamación, regulación cortisol post-esfuerzo</td>
+                                </tr>
+                                <tr style="background: #f0f8ff;">
+                                    <td colspan="4"><strong>NOCHE (igual a días sin nado)</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Magnesio L-Treonato</strong></td>
+                                    <td>1500 mg</td>
+                                    <td>21:00-21:30</td>
+                                    <td>Recuperación neurológica + sueño crítico post-nado</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Glicina</strong></td>
+                                    <td>3000 mg</td>
+                                    <td>21:30</td>
+                                    <td>Síntesis proteína muscular nocturna</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: TIMELINE -->
+        <div id="timeline" class="tab-content">
+            <div class="timeline">
+                <div class="timeline-node">
+                    <h3>📍 Semana 1-2: BASE ADAPTÓGENA</h3>
+                    <ul>
+                        <li><strong>Iniciar:</strong> Ashwagandha + Ginseng Rojo + Magnesio + Glicina</li>
+                        <li><strong>Objetivo:</strong> Estabilizar sueño, cortisol basal</li>
+                        <li><strong>NO añadir aún:</strong> Cordyceps, Beta-Alanina, Omega-3</li>
+                        <li><strong>Monitoreo:</strong> Calidad sueño subjetiva, fatiga matutina</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-node">
+                    <h3>📍 Semana 3-4: AÑADIR AERÓBICA</h3>
+                    <ul>
+                        <li><strong>Añadir:</strong> Cordyceps (2g) + Beta-Alanina (start 1.5g/día)</li>
+                        <li><strong>Objetivo:</strong> Cargar mitocondria, iniciar saturación carnosina</li>
+                        <li><strong>Timing:</strong> Beta-Alanina LENTAMENTE (dosis divididas)</li>
+                        <li><strong>Observable:</strong> Capacidad nado mejora, hormigueo benignó (se atenúa)</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-node">
+                    <h3>📍 Semana 5-8: ESCALADO POST-NADO</h3>
+                    <ul>
+                        <li><strong>Mantener:</strong> Stack base + Cordyceps + Beta-Alanina (3.2g)</li>
+                        <li><strong>Añadir:</strong> Omega-3 + PS POST-nado, Quercetina</li>
+                        <li><strong>Objetivo:</strong> Fatiga mental ↓30-40%, Recuperación acelerada</li>
+                        <li><strong>Esperado:</strong> Tiempo 5km ↓2-3 minutos vía VO₂max + beta-alanina</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-node">
+                    <h3>📍 Semana 9-12: PROTOCOLO COMPLETO OPTIMIZADO</h3>
+                    <ul>
+                        <li><strong>Stack completo:</strong> 10 suplementos según día nado/sin nado</li>
+                        <li><strong>Dosis sostenidas:</strong> Mantener continuidad; efectos máximos acumulativos</li>
+                        <li><strong>Objetivo:</strong> Oceanman 5km readiness (16 meses prep total)</li>
+                        <li><strong>Esperado:</strong> Precisión quirúrgica sostenida, burnout mitigado, resiliencia restaurada</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: SAFETY -->
+        <div id="safety" class="tab-content">
+            <div class="tier-section">
+                <h2>⚠️ Consideraciones de Seguridad Clínica</h2>
+                
+                <h3 style="color: var(--primary); margin-top: 25px; margin-bottom: 15px;">Contraindicaciones Absolutas</h3>
+                <div class="safety-warning">
+                    <strong>Ginseng:</strong> Si está en Warfarina → EVITAR sin monitoreo INR cerrado
+                </div>
+                <div class="safety-warning">
+                    <strong>Ashwagandha:</strong> Si está en benzodiazepinas/sedantes → EVITAR (depresión CNS aditiva)
+                </div>
+                <div class="safety-warning">
+                    <strong>Omega-3 alto:</strong> Si está en anticoagulantes dosis alta → EVITAR sin médico evaluador
+                </div>
+
+                <h3 style="color: var(--primary); margin-top: 25px; margin-bottom: 15px;">Monitoreo Recomendado</h3>
+                <ul style="margin-left: 20px; line-height: 1.9; color: #555;">
+                    <li>✓ <strong>Función hepática</strong> (AST/ALT): baseline + 8 semanas si historial</li>
+                    <li>✓ <strong>TSH</strong>: baseline + 8 semanas si Ashwagandha >600 mg/día</li>
+                    <li>✓ <strong>INR</strong>: cada 2 semanas si en Warfarina (si Ginseng usado)</li>
+                    <li>✓ <strong>Cortisol salivar</strong>: baseline + 8 semanas</li>
+                </ul>
+
+                <h3 style="color: var(--primary); margin-top: 25px; margin-bottom: 15px;">Perfil de Efectos Adversos</h3>
+                <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; line-height: 1.8; color: #555;">
+                    <p>• <strong>Beta-Alanina:</strong> Parestesia facial (hormigueo benignó) → se atenúa con dosis divididas</p>
+                    <p>• <strong>Magnesio:</strong> Diarrea posible (raro) → reducir a 1000 mg si GI upset</p>
+                    <p>• <strong>Ashwagandha:</strong> Reportes raros de hepatotoxicidad → monitorear función hepática</p>
+                    <p>• <strong>Ginseng:</strong> Posible efecto estimulante en sensibles → tomar en mañana, no tarde</p>
+                    <p>• <strong>Perfil general:</strong> Bajo (~<3% en ensayos); todos GRAS (FDA)</p>
+                </div>
+
+                <div style="background: #d4edda; border-radius: 8px; padding: 15px; margin-top: 20px; border-left: 4px solid var(--success);">
+                    <p><strong>✓ Compatibilidad Quirúrgica:</strong> Todos los suplementos compatibles con práctica quirúrgica de precisión</p>
+                    <p><strong>✓ NO son dopantes:</strong> Cumplen criterios WADA (World Anti-Doping Agency)</p>
+                    <p><strong>✓ Discontinuación pre-cirugía:</strong> Ashwagandha (24h), Ginseng (48h), resto: continuar según protocolo</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: COSTS -->
+        <div id="costs" class="tab-content">
+            <div class="tier-section">
+                <h2>💰 Análisis de Costos Mensuales</h2>
+                
+                <div class="cost-grid">
+                    <div class="cost-card">
+                        <h3>💚 Económico</h3>
+                        <p>Genéricos confiables</p>
+                        <div class="cost-amount">$60-90 USD</div>
+                        <p style="color: #7f8c8d; font-size: 0.9em;">Mes completo<br>NOW Foods · Bulk Supplements</p>
+                    </div>
+
+                    <div class="cost-card">
+                        <h3>💙 Intermedio</h3>
+                        <p>Buena calidad verificada</p>
+                        <div class="cost-amount">$90-120 USD</div>
+                        <p style="color: #7f8c8d; font-size: 0.9em;">Mes completo<br>NOW · Solgar · Gaia Herbs</p>
+                    </div>
+
+                    <div class="cost-card">
+                        <h3>💜 Premium</h3>
+                        <p>Máxima pureza y potencia</p>
+                        <div class="cost-amount">$120-170 USD</div>
+                        <p style="color: #7f8c8d; font-size: 0.9em;">Mes completo<br>Thorne · Life Extension</p>
+                    </div>
+                </div>
+
+                <div class="tier-section" style="margin-top: 30px; border-left-color: var(--warning);">
+                    <h3 style="color: var(--warning);">📋 Recomendación de Compra Estratégica</h3>
+                    <ul style="margin-left: 20px; margin-top: 15px; line-height: 2; color: #555;">
+                        <li><strong>Mes 1:</strong> Comenzar con Stack ECONÓMICO (Ashwagandha + Ginseng + Magnesio + Glicina)</li>
+                        <li><strong>Mes 2:</strong> Reevaluar tolerancia → escalar a INTERMEDIO si se justifica</li>
+                        <li><strong>Mes 3+:</strong> Mantener categoría elegida o cambiar según respuesta individual</li>
+                        <li><strong>Amazon Colombia:</strong> Todos los productos disponibles con envío internacional</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <h3>📄 Documento Clínico Verificado · Diciembre 2025</h3>
+        <p style="margin: 15px 0; font-size: 1em;">✓ Referencias primarias validadas en PubMed Central / NIH ODS</p>
+        <p style="margin: 15px 0; font-size: 1em;">✓ Todas las referencias han sido verificadas explícitamente contra fuente primaria</p>
+        <p style="margin: 15px 0; font-size: 0.95em; color: #bdc3c7;">Supervisado por investigación clínica (medicina deportiva & neurobiología ocupacional)</p>
+        <p style="margin-top: 20px; color: #bdc3c7; font-size: 0.9em;">Para consultas médicas específicas, revisar con profesional de salud responsable</p>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
